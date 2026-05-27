@@ -1,2 +1,2 @@
-# FullStackOpen-TypeScript
-Helsingin yliopiston Full Stack Open TypeScript (Osa 9) tehtävien palautukset.
+# Full Stack ‑websovelluskehitys: TypeScript (Osa 9)
+Tehtävien palautukset Helsingin yliopiston [Full Stack Open](https://fullstackopen.com/) ‑verkkokurssilta.
