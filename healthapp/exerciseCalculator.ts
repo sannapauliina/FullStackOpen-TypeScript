@@ -8,6 +8,29 @@ interface ExerciseResult {
   average: number;
 }
 
+interface ExerciseValues {
+  dailyHours: number[];
+  target: number;
+}
+
+const parseExerciseArguments = (args: string[]): ExerciseValues => {
+  if (args.length < 4) {
+    throw new Error("Not enough arguments");
+  }
+
+  const target = Number(args[2]);
+  const dailyHours = args.slice(3).map((n) => Number(n));
+
+  if (isNaN(target) || dailyHours.some((n) => isNaN(n))) {
+    throw new Error("Provided values were not numbers!");
+  }
+
+  return {
+    dailyHours,
+    target,
+  };
+};
+
 export const calculateExercises = (
   dailyHours: number[],
   target: number,
@@ -40,5 +63,13 @@ export const calculateExercises = (
   };
 };
 
-// kutsu
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const { dailyHours, target } = parseExerciseArguments(process.argv);
+  console.log(calculateExercises(dailyHours, target));
+} catch (error: unknown) {
+  let errorMessage = "Something went wrong.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
