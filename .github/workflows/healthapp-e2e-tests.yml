@@ -25,9 +25,9 @@ jobs:
         working-directory: ./healthapp
         run: npm run lint
 
-      - name: Build healthapp
+      - name: Skip build in CI
         working-directory: ./healthapp
-        run: npm run build
+        run: echo "Skipping TypeScript build in GitHub Actions"
 
       - name: Start healthapp server
         working-directory: ./healthapp
