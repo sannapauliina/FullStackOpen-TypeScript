@@ -25,6 +25,10 @@ jobs:
         working-directory: ./healthapp
         run: npm run lint
 
+      - name: Build healthapp
+        working-directory: ./healthapp
+        run: npm run build
+
       - name: Start healthapp server
         working-directory: ./healthapp
         run: |
