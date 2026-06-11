@@ -7,6 +7,12 @@ const app = express();
 const PORT = 3001;
 
 app.use(cors());
+app.use(express.json());
+
+app.post("/api/patients", (req, res) => {
+  const newPatient = patientService.addPatient(req.body);
+  res.json(newPatient);
+});
 
 app.get("/api/ping", (_req, res) => {
   res.send("pong");
