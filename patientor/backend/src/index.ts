@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import diagnoseService from "./services/diagnoseService";
 import patientService from "./services/patientService";
-import { toNewPatient } from "./utils";
+import { parseNewPatient } from "./zodSchemas";
 
 const app = express();
 const PORT = 3001;
@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.post("/api/patients", (req, res) => {
   try {
-    const newPatient = toNewPatient(req.body);
+    const newPatient = parseNewPatient(req.body);
     const addedPatient = patientService.addPatient(newPatient);
     res.json(addedPatient);
   } catch (e: unknown) {
