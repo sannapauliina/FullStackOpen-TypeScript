@@ -51,8 +51,12 @@ function App() {
       setComment("");
     } catch (e) {
       if (axios.isAxiosError(e)) {
-        const axiosError = e as AxiosError<{ error: string }>;
-        setError(axiosError.response?.data?.error || "Unknown error");
+        if (!e.response) {
+          setError("Network error: backend is not responding");
+        } else {
+          const axiosError = e as AxiosError<{ error: string }>;
+          setError(axiosError.response.data?.error || "Unknown error");
+        }
       } else {
         setError("Something went wrong");
       }
@@ -69,33 +73,51 @@ function App() {
 
       <h2>Add new entry</h2>
       <form onSubmit={addDiary}>
+        {/* DATE */}
         <div>
           date:
           <input
-            type="text"
+            type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />
         </div>
 
+        {/* WEATHER */}
         <div>
           weather:
-          <input
-            type="text"
-            value={weather}
-            onChange={(e) => setWeather(e.target.value)}
-          />
+          {["sunny", "rainy", "cloudy", "stormy", "windy"].map((w) => (
+            <label key={w} style={{ marginLeft: "0.5rem" }}>
+              <input
+                type="radio"
+                name="weather"
+                value={w}
+                checked={weather === w}
+                onChange={(e) => setWeather(e.target.value)}
+              />
+              {w}
+            </label>
+          ))}
         </div>
 
+        {/* VISIBILITY */}
         <div>
           visibility:
-          <input
-            type="text"
-            value={visibility}
-            onChange={(e) => setVisibility(e.target.value)}
-          />
+          {["great", "good", "ok", "poor"].map((v) => (
+            <label key={v} style={{ marginLeft: "0.5rem" }}>
+              <input
+                type="radio"
+                name="visibility"
+                value={v}
+                checked={visibility === v}
+                onChange={(e) => setVisibility(e.target.value)}
+              />
+              {v}
+            </label>
+          ))}
         </div>
 
+        {/* COMMENT */}
         <div>
           comment:
           <input
