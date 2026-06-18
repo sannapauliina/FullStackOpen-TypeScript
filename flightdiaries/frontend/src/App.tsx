@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import type { DiaryEntry } from "./types";
 
 function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const [date, setDate] = useState("");
   const [weather, setWeather] = useState("");
@@ -17,8 +18,8 @@ function App() {
           "http://localhost:3000/api/diaries",
         );
         setDiaries(data);
-      } catch (error) {
-        console.error("Failed to fetch diaries:", error);
+      } catch (e) {
+        console.error("Failed to fetch diaries:", e);
       }
     };
 
@@ -27,6 +28,7 @@ function App() {
 
   const addDiary = async (event: React.FormEvent) => {
     event.preventDefault();
+    setError(null);
 
     try {
       const newEntry = {
@@ -47,14 +49,23 @@ function App() {
       setWeather("");
       setVisibility("");
       setComment("");
-    } catch (error) {
-      console.error("Failed to add diary:", error);
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const axiosError = e as AxiosError<{ error: string }>;
+        setError(axiosError.response?.data?.error || "Unknown error");
+      } else {
+        setError("Something went wrong");
+      }
     }
   };
 
   return (
     <div style={{ padding: "1rem" }}>
       <h1>Flight Diaries</h1>
+
+      {error && (
+        <div style={{ color: "red", marginBottom: "1rem" }}>Error: {error}</div>
+      )}
 
       <h2>Add new entry</h2>
       <form onSubmit={addDiary}>
