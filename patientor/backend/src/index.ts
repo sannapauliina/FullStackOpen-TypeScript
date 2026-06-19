@@ -2,27 +2,14 @@ import express from "express";
 import cors from "cors";
 import diagnoseService from "./services/diagnoseService";
 import patientService from "./services/patientService";
-import { parseNewPatient } from "./zodSchemas";
+import patientsRouter from "./routes/patients";
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
-
-app.post("/api/patients", (req, res) => {
-  try {
-    const newPatient = parseNewPatient(req.body);
-    const addedPatient = patientService.addPatient(newPatient);
-    res.json(addedPatient);
-  } catch (e: unknown) {
-    let errorMessage = "Something went wrong.";
-    if (e instanceof Error) {
-      errorMessage += " Error: " + e.message;
-    }
-    res.status(400).send(errorMessage);
-  }
-});
+app.use("/api/patients", patientsRouter);
 
 app.get("/api/ping", (_req, res) => {
   res.send("pong");
