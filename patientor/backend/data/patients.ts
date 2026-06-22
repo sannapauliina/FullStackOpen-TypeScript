@@ -9,7 +9,19 @@ const patients: Patient[] = [
     ssn: "090786-122X",
     gender: Gender.Male,
     occupation: "New york city cop",
-    entries: [],
+    entries: [
+      {
+        id: "h1",
+        date: "2020-01-01",
+        type: "Hospital",
+        specialist: "Dr. House",
+        description: "Yearly control visit.",
+        discharge: {
+          date: "2020-01-02",
+          criteria: "Patient recovered",
+        },
+      },
+    ],
   },
   {
     id: "d2773598-f723-11e9-8f0b-362b9e155667",
@@ -36,7 +48,16 @@ const patients: Patient[] = [
     ssn: "050174-432N",
     gender: Gender.Female,
     occupation: "Forensic Pathologist",
-    entries: [],
+    entries: [
+      {
+        id: "o1",
+        date: "2021-02-10",
+        type: "OccupationalHealthcare",
+        specialist: "Dr. Smith",
+        employerName: "ACME Inc",
+        description: "Work-related stress consultation.",
+      },
+    ],
   },
   {
     id: "d2773c6e-f723-11e9-8f0b-362b9e155667",
