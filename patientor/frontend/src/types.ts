@@ -4,17 +4,12 @@ export interface Diagnosis {
   latin?: string;
 }
 
-export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other",
-}
-
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   date: string;
   specialist: string;
   description: string;
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 export interface HospitalEntry extends BaseEntry {
@@ -30,16 +25,28 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   employerName: string;
 }
 
-export type Entry = HospitalEntry | OccupationalHealthcareEntry;
+export interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck";
+  healthCheckRating: number;
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
 
 export interface Patient {
   id: string;
   name: string;
+  ssn: string;
   occupation: string;
   gender: Gender;
-  ssn?: string;
-  dateOfBirth?: string;
+  dateOfBirth: string;
   entries: Entry[];
 }
 
-export type PatientFormValues = Omit<Patient, "id" | "entries">;
+export enum Gender {
+  Male = "male",
+  Female = "female",
+  Other = "other",
+}

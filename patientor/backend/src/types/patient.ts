@@ -1,11 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type Entry = HospitalEntry | OccupationalHealthcareEntry;
+import { Diagnosis } from "./diagnosis";
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   date: string;
   specialist: string;
   description: string;
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
@@ -20,6 +20,16 @@ export interface HospitalEntry extends BaseEntry {
     criteria: string;
   };
 }
+
+export interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck";
+  healthCheckRating: number;
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
 
 export interface Patient {
   id: string;
