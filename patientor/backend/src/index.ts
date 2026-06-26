@@ -3,6 +3,7 @@ import cors from "cors";
 import diagnoseService from "./services/diagnoseService";
 import patientService from "./services/patientService";
 import patientsRouter from "./routes/patients";
+import { EntrySchema } from "./utils";
 
 const app = express();
 const PORT = 3001;
@@ -21,6 +22,22 @@ app.get("/api/diagnoses", (_req, res) => {
 
 app.get("/api/patients", (_req, res) => {
   res.json(patientService.getNonSensitivePatients());
+});
+
+app.post("/api/patients/:id/entries", (req, res) => {
+  try {
+    const parsedEntry = EntrySchema.parse(req.body);
+
+    const updatedPatient = patientService.addEntry(req.params.id, parsedEntry);
+
+    res.json(updatedPatient);
+  } catch (e: unknown) {
+    let message = "Something went wrong.";
+    if (e instanceof Error) {
+      message += " Error: " + e.message;
+    }
+    res.status(400).send(message);
+  }
 });
 
 app.listen(PORT, () => {
