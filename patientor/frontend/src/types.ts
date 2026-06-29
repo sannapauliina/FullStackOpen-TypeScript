@@ -50,3 +50,5 @@ export enum Gender {
   Female = "female",
   Other = "other",
 }
+
+export type NewEntry = Omit<Entry, "id">;
