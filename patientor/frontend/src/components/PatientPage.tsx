@@ -75,6 +75,7 @@ const PatientPage = ({ diagnoses }: Props) => {
           setPatient={setPatient}
           setError={setError}
           setShowForm={setFormType}
+          diagnoses={diagnoses}
         />
       )}
 
@@ -84,6 +85,7 @@ const PatientPage = ({ diagnoses }: Props) => {
           setPatient={setPatient}
           setError={setError}
           setShowForm={setFormType}
+          diagnoses={diagnoses}
         />
       )}
 
@@ -93,6 +95,7 @@ const PatientPage = ({ diagnoses }: Props) => {
           setPatient={setPatient}
           setError={setError}
           setShowForm={setFormType}
+          diagnoses={diagnoses}
         />
       )}
 
