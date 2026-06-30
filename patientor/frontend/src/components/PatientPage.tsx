@@ -5,6 +5,10 @@ import patientService from "../services/patients";
 import EntryDetails from "./EntryDetails";
 import axios from "axios";
 
+import HealthCheckEntryForm from "./HealthCheckEntryForm";
+import HospitalEntryForm from "./HospitalEntryForm";
+import OccupationalHealthcareEntryForm from "./OccupationalHealthcareEntryForm";
+
 interface Props {
   diagnoses: Diagnosis[];
 }
@@ -13,7 +17,8 @@ const PatientPage = ({ diagnoses }: Props) => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
 
-  const [showForm, setShowForm] = useState(false);
+  const [formType, setFormType] = useState<string | null>(null);
+
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,36 +30,6 @@ const PatientPage = ({ diagnoses }: Props) => {
     };
     void fetchPatient();
   }, [id]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!patient) return;
-
-    const form = e.target as HTMLFormElement;
-
-    const newEntry = {
-      type: "HealthCheck",
-      date: form.date.value,
-      specialist: form.specialist.value,
-      description: form.description.value,
-      healthCheckRating: Number(form.healthCheckRating.value),
-    };
-
-    try {
-      const updatedPatient = await patientService.addEntry(
-        patient.id,
-        newEntry,
-      );
-      setPatient(updatedPatient);
-      setShowForm(false);
-      setError(null);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        setError(error.response?.data || "Unknown error");
-        form.reset();
-      }
-    }
-  };
 
   if (!patient) return <div>Loading...</div>;
 
@@ -68,38 +43,57 @@ const PatientPage = ({ diagnoses }: Props) => {
       <button
         onClick={() => {
           setError(null);
-          setShowForm(true);
+          setFormType("HealthCheck");
         }}
       >
         Add HealthCheck entry
       </button>
 
+      <button
+        onClick={() => {
+          setError(null);
+          setFormType("Hospital");
+        }}
+      >
+        Add Hospital entry
+      </button>
+
+      <button
+        onClick={() => {
+          setError(null);
+          setFormType("OccupationalHealthcare");
+        }}
+      >
+        Add OccupationalHealthcare entry
+      </button>
+
       {error && <div style={{ color: "red" }}>{error}</div>}
 
-      {showForm && (
-        <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-          <div>
-            <label>Date</label>
-            <input name="date" />
-          </div>
+      {formType === "HealthCheck" && (
+        <HealthCheckEntryForm
+          patient={patient}
+          setPatient={setPatient}
+          setError={setError}
+          setShowForm={setFormType}
+        />
+      )}
 
-          <div>
-            <label>Specialist</label>
-            <input name="specialist" />
-          </div>
+      {formType === "Hospital" && (
+        <HospitalEntryForm
+          patient={patient}
+          setPatient={setPatient}
+          setError={setError}
+          setShowForm={setFormType}
+        />
+      )}
 
-          <div>
-            <label>Description</label>
-            <input name="description" />
-          </div>
-
-          <div>
-            <label>HealthCheckRating</label>
-            <input name="healthCheckRating" />
-          </div>
-
-          <button type="submit">Add</button>
-        </form>
+      {formType === "OccupationalHealthcare" && (
+        <OccupationalHealthcareEntryForm
+          patient={patient}
+          setPatient={setPatient}
+          setError={setError}
+          setShowForm={setFormType}
+        />
       )}
 
       <h3>Entries</h3>
